@@ -26,5 +26,11 @@
       "error",
       "always"
     ]
-  }
+  },
+  "ignorePatterns": [
+    ".idea",
+    "node_modules",
+    "dist",
+    "*.config.js"
+  ]
 }
