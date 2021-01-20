@@ -14,6 +14,12 @@
     "@typescript-eslint"
   ],
   "rules": {
+    "max-len": [
+      "warn",
+      {
+        "code": 160
+      }
+    ],
     "indent": [
       "error",
       4

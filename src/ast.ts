@@ -46,5 +46,8 @@ export function executeAST(ast: ASTNode): number {
 
     const node: NonTerminalNode = ast as NonTerminalNode;
 
-    return Operators[node.children.length][node.op](node.children.map((val) => executeAST(val)));
+    return Operators.get(node.op).eval.apply(
+        this,
+        node.children.map((val) => executeAST(val))
+    );
 }

@@ -16,6 +16,9 @@ export const rpn = (inp: (string | number)[]): (string | number)[] => {
                     if (stack.length == 0) {
                         throw new EvalError("Mismatched brackets");
                     }
+                    if (stack[stack.length - 1] == "(") {
+                        break;
+                    }
                     stackElement = stack.pop();
                     result.push(stackElement);
                     if (getOperatorPriority(stackElement) <= getOperatorPriority(el)) {

@@ -2,34 +2,34 @@ import { getOperandsCount, getOperatorPriority, isFunctionName, isPostfixOperato
 
 describe("Binary operators", () => {
     test("+", () => {
-        expect(Operators[2]["+"]([3, 4])).toEqual(7);
+        expect(Operators.get("+").eval.apply(this, [3, 4])).toEqual(7);
     });
     test("-", () => {
-        expect(Operators[2]["-"]([3, 4])).toEqual(-1);
+        expect(Operators.get("-").eval.apply(this, [3, 4])).toEqual(-1);
     });
     test("*", () => {
-        expect(Operators[2]["*"]([3, 4])).toEqual(12);
+        expect(Operators.get("*").eval.apply(this, [3, 4])).toEqual(12);
     });
     test("/", () => {
-        expect(Operators[2]["/"]([12, 4])).toEqual(3);
+        expect(Operators.get("/").eval.apply(this, [12, 4])).toEqual(3);
     });
     test("^", () => {
-        expect(Operators[2]["^"]([2, 4])).toEqual(16);
+        expect(Operators.get("^").eval.apply(this, [2, 4])).toEqual(16);
     });
 });
 
 describe("Unary operators", () => {
     test("**", () => {
-        expect(Operators[1]["**"]([4])).toEqual(16);
+        expect(Operators.get("**").eval.apply(this, [4])).toEqual(16);
     });
     test("!", () => {
-        expect(Operators[1]["!"]([3])).toEqual(6);
+        expect(Operators.get("!").eval.apply(this, [3])).toEqual(6);
     });
     test("sin", () => {
-        expect(Operators[1]["sin"]([60])).toEqual(Math.sin((60 * Math.PI) / 180));
+        expect(Operators.get("sin").eval.apply(this, [60])).toEqual(Math.sin((60 * Math.PI) / 180));
     });
     test("cos", () => {
-        expect(Operators[1]["cos"]([60])).toEqual(Math.cos((60 * Math.PI) / 180));
+        expect(Operators.get("cos").eval.apply(this, [60])).toEqual(Math.cos((60 * Math.PI) / 180));
     });
 });
 

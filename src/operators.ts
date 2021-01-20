@@ -1,57 +1,42 @@
+interface Operator {
+    name: string;
+    isFunction: boolean;
+    isPostfix: boolean;
+    priority: number;
+
+    eval(...args: number[]): number;
+}
+
+const OperatorsDefinitions: Operator[] = [
+    { name: "**", priority: Number.MAX_VALUE, isFunction: false, isPostfix: true, eval: (a: number): number => Math.pow(a, 2) },
+    { name: "!", priority: Number.MAX_VALUE, isFunction: false, isPostfix: true, eval: (a: number): number => factorial(a) },
+    { name: "sin", priority: Number.MAX_VALUE, isFunction: true, isPostfix: false, eval: (a: number): number => Math.sin((a * Math.PI) / 180) },
+    { name: "cos", priority: Number.MAX_VALUE, isFunction: true, isPostfix: false, eval: (a: number): number => Math.cos((a * Math.PI) / 180) },
+    { name: "tan", priority: Number.MAX_VALUE, isFunction: true, isPostfix: false, eval: (a: number): number => Math.tan((a * Math.PI) / 180) },
+
+    { name: "+", priority: 2, isFunction: false, isPostfix: false, eval: (a: number, b: number): number => a + b },
+    { name: "-", priority: 2, isFunction: false, isPostfix: false, eval: (a: number, b: number): number => a - b },
+    { name: "*", priority: 1, isFunction: false, isPostfix: false, eval: (a: number, b: number): number => a * b },
+    { name: "/", priority: 1, isFunction: false, isPostfix: false, eval: (a: number, b: number): number => a / b },
+    { name: "^", priority: 0, isFunction: false, isPostfix: false, eval: (a: number, b: number): number => Math.pow(a, b) },
+];
+
+export const Operators: Map<string, Operator> = ((): Map<string, Operator> => {
+    const result: Map<string, Operator> = new Map<string, Operator>();
+
+    for (const o of OperatorsDefinitions) {
+        result.set(o.name, o);
+    }
+
+    return result;
+})();
+
 const factorial = (n: number): number => (n > 1 ? n * factorial(n - 1) : 1);
 
-const UnaryOperators = {
-    "**": (args: number[]): number => Math.pow(args[0], 2),
-    "!": (args: number[]): number => factorial(args[0]),
-    sin: (args: number[]): number => Math.sin((args[0] * Math.PI) / 180),
-    cos: (args: number[]): number => Math.cos((args[0] * Math.PI) / 180),
-    tan: (args: number[]): number => Math.tan((args[0] * Math.PI) / 180),
-};
+export const getOperandsCount = (op: string): number => Operators.get(op)?.eval?.length || 0;
 
-const BinaryOperators = {
-    "+": (args: number[]): number => args[0] + args[1],
-    "-": (args: number[]): number => args[0] - args[1],
-    "*": (args: number[]): number => args[0] * args[1],
-    "/": (args: number[]): number => args[0] / args[1],
-    "^": (args: number[]): number => Math.pow(args[0], args[1]),
-};
+export const isPostfixOperator = (op: string): boolean => Operators.get(op)?.isPostfix || false;
 
-const PrefixOperators: Set<string> = new Set(["**", "!"]);
+export const isFunctionName = (op: string): boolean => Operators.get(op)?.isFunction || false;
 
-const Functions: Set<string> = new Set(["sin", "cos", "tan"]);
-
-const OperatorsPriorities: string[][] = [["^"], ["*", "/"], ["+", "-"], ["(", ")"]];
-
-export const Operators = {
-    1: UnaryOperators,
-    2: BinaryOperators,
-};
-
-export const getOperandsCount = (() => {
-    const operandsCounts: Map<string, number> = new Map<string, number>();
-    for (const count in Operators) {
-        if (Object.prototype.hasOwnProperty.call(Operators, count)) {
-            for (const op in Operators[count]) {
-                if (Object.prototype.hasOwnProperty.call(Operators[count], op)) {
-                    operandsCounts.set(op, Number(count));
-                }
-            }
-        }
-    }
-    return (op: string): number => operandsCounts.get(op);
-})();
-
-export const isPostfixOperator = (op: string): boolean => PrefixOperators.has(op);
-
-export const isFunctionName = (op: string): boolean => Functions.has(op);
-
-export const getOperatorPriority = (() => {
-    const OperatorsPrioritiesMap: Map<string, number> = new Map<string, number>();
-    for (let i = 0; i < OperatorsPriorities.length; i++) {
-        for (const op of OperatorsPriorities[i]) {
-            OperatorsPrioritiesMap.set(op, i);
-        }
-    }
-
-    return (op: string): number => OperatorsPrioritiesMap.get(op);
-})();
+export const getOperatorPriority = (op: string): number => (Operators.has(op) ? Operators.get(op).priority : Number.MAX_VALUE);
